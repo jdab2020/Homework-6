@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Weather Dashboard</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <span class="navbar-brand mx-auto h1">Weather Dashboard</span>
+    </nav>
+    <div class="container-fluid">
+        <div class="row flex-xl-nowrap">
+
+            <div class="col-md-2 bd-sidebar border-right border-dark">
+
+                <h4>Search for a city:</h4>
+
+                <form role="search" class="bd-search d-flex align-items-center py-2">
+
+                    <!-- <div class="form-group mx-sm-3 mb-2">
+                        <input type="search" class="form-control" placeholder="Search...">
+                        </div>
+                    <button type="submit"><i class="fa fa-search" style="font-size: 48px;"></i></button> -->
+
+                    <span class="algolia-autocomplete" style="position: relative; display: inline-block; direction: ltr;">
+                        <input type="search" class="form-control ds-input" id="search-input" placeholder="Search..."></input>
+                    </span>
+                    <!-- <button type="submit"><i class="fa fa-search"></i></button> -->
+                </form>
+
+                <div class="sidebar-sticky" aria-label="Main navigation">
+                    <!-- <nav class="collapse bd-links" id="bd-docs-nav" aria-label="Main navigation"></nav> -->
+                    <ul id="side" class="nav flex-column">
+                        <!-- <li class="active bd-sidenav-active"> -->
+                        
+                        <!-- <li class="nav-item">
+                            <a class="nav-link text-primary">Los Angeles, CA</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-primary">San Francisco, CA</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-primary">New York, NY</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-primary">Miami, FL</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-primary">Chicago, IL</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-primary">Houston, TX</a>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var cities = ["Atlanta","Brooklyn","Chicago","Denver","Houston","Indiana","Miami","Orlando","Seattle"]
+        var APIKey = "166a433c57516f51dfab1f7edaed8413";
+
+        $(cities).each(function () {
+            let city = this;
+            // var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
+            renderSideBar(city);
+        })
+
+        function renderSideBar(city){
+            let cityli = $("<li>");
+            $(cityli).addClass("nav-item");
+            let cityA = $("<a>");
+            $(cityA).addClass("nav-link text-primary border")
+            $(cityA).text(city)
+            $(cityli).append(cityA)
+            $("#side").append(cityli)
+        }
+
+
+
+
+
+
+
+
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <script src="https://use.fortawesome.com/349cfdf6.js"></script>
+</body>
+
+</html>
