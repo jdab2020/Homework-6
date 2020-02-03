@@ -29,10 +29,8 @@
                         </div>
                     <button type="submit"><i class="fa fa-search" style="font-size: 48px;"></i></button> -->
 
-                    <span class="algolia-autocomplete"
-                        style="position: relative; display: inline-block; direction: ltr;">
-                        <input type="search" class="form-control ds-input" id="search-input"
-                            placeholder="Search..."></input>
+                    <span class="algolia-autocomplete" style="position: relative; display: inline-block; direction: ltr;">
+                        <input type="text" class="form-control ds-input" id="search-input"placeholder="Search..."></input>
                     </span>
                     <!-- <button type="submit"><i class="fa fa-search"></i></button> -->
                 </form>
@@ -50,19 +48,12 @@
                 <div class = "row" id = "forecast">
 
                 </div>
-
             </div>
-
-
-
-
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
         var cities = ["Atlanta", "Brooklyn", "Chicago", "Denver", "Houston", "Indiana", "Miami", "Orlando", "Seattle"]
-        var APIKey = "166a433c57516f51dfab1f7edaed8413";
-
         // runs a loop to display each city
         $(cities).each(function () {
             let city = this;
@@ -85,7 +76,7 @@
         })
         // render city
         function renderCity(city) {
-            var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
+            var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=166a433c57516f51dfab1f7edaed8413";
             $.ajax({
                 url: queryURL,
                 method: "GET"
@@ -107,6 +98,16 @@
                 $("#currentWeather").html(cityInfo);
             })
         }
+        // input event 
+        $("#search-input").on("submit", function(){
+            alert("Yooo");
+            let city = $(this).val().trim();
+            console.log($(this).val());
+            console.log($(this).text());
+            renderCity(city);
+        })
+
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
