@@ -29,9 +29,9 @@
                         </div>
                     <button type="submit"><i class="fa fa-search" style="font-size: 48px;"></i></button> -->
 
-                    <span class="algolia-autocomplete" style="position: relative; display: inline-block; direction: ltr;">
+                    <!-- <span class="algolia-autocomplete" style="position: relative; display: inline-block; direction: ltr;"> -->
                         <input type="text" class="form-control ds-input" id="search-input"placeholder="Search..."></input>
-                    </span>
+                    <!-- </span> -->
                     <!-- <button type="submit"><i class="fa fa-search"></i></button> -->
                 </form>
 
@@ -41,11 +41,22 @@
                 </div>
             </div>
 
-            <div class="col-md-8 border">
-                <div class = "row" id = "currentWeather">
+            <!-- <div class="col-md-2 border-right border dark">
+                <h4>Search for a city:</h4>
+                <input type="text" id="search-input" placeholder="Search..."></input>
+                <div>
+                    <ul id="side" class="flex-column">
+
+                    </ul>
+                </div>
+            </div> -->
+
+            <div class="col-md-8">
+                <div class = "row ml-1 py-1 border" id = "currentWeather">
 
                 </div>
-                <div class = "row" id = "forecast">
+                <div class = "row ml-1 py-1 mt-2 pt-2" id = "forecast"> 
+                    <h3>5-Day Forecast</h3>
 
                 </div>
             </div>
@@ -53,6 +64,7 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
+    $(document).ready(function(){ 
         var cities = ["Atlanta", "Brooklyn", "Chicago", "Denver", "Houston", "Indiana", "Miami", "Orlando", "Seattle"]
         // runs a loop to display each city
         $(cities).each(function () {
@@ -99,15 +111,27 @@
             })
         }
         // input event 
-        $("#search-input").on("submit", function(){
+        $("input").on("submit", function(event){
+            event.preventDefault();
             alert("Yooo");
-            let city = $(this).val().trim();
+            let newCity = $(this).val().trim();
             console.log($(this).val());
             console.log($(this).text());
-            renderCity(city);
+            renderCity(newCity);
         })
 
+        // $("#search-input").keypress(function (event) {
+        //     let keycode = (event.keyCode ? event.keyCode : event.which);
+        //     if (keycode === '13') {
+        //         alert("Yooo");
+        //         let city = $(this).val().trim();
+        //         console.log($(this).val());
+        //         console.log($(this).text());
+        //         renderCity(city);
+        //     }
+        // })
 
+    })
     </script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
