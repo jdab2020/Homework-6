@@ -18,7 +18,7 @@
     <div class="container-fluid">
         <div class="row flex-xl-nowrap">
 
-            <div class="col-md-2 bd-sidebar border-right border-dark">
+            <div class="col-md-2 bd-sidebar border-right border-dark pb-2 mb-2">
 
                 <h4>Search for a city:</h4>
 
@@ -55,9 +55,11 @@
                 <div class="row ml-1 py-1 border" id="currentWeather">
 
                 </div>
-                <div class="row ml-1 py-1 mt-2 pt-2" id="forecast">
-                    <h3>5-Day Forecast</h3>
+                <div class="row ml-1 py-1 mt-2 pt-2">
+                    <div class="row mx-auto"><h3>5-Day Forecast</h3></div>
+                    <div class="row" id="forecast">
 
+                    </div>
                 </div>
             </div>
         </div>
@@ -105,20 +107,22 @@
                     let temperatureF = ((Number(temperatureK) - 273.15) * 1.8) + 32;
                     let humidity = response.main.humidity;
                     let windSpeed = response.wind.speed;
-                    renderUV(apiKey,longitude,latitude);
-                    console.log(UV)
+                    renderUV(apiKey,latitude,longitude);
                     renderWeather(cityName,temperatureF,humidity,windSpeed,UV);
                     renderFiveDay(apiKey,city);
                 })
             }
             // grab info about uv
-            function renderUV(longitude,latitude) {
-                let queryUV = "https://api.openweathermap.org/data/2.5/uvi?appid=" + apikey + longitude + latitude;
+            function renderUV(apiKey,latitude,longitude) {
+                let queryUV = "https://api.openweathermap.org/data/2.5/uvi/forecast?appid=" + apiKey + "&lat=" + latitude + "&lon=" + longitude;
+
                 $.ajax({
                     url: queryUV,
                     method: "GET"
                 }).then(function(response) {
                     console.log(response);
+                    UV = response.value;
+                    return UV;
                 })
             }
             // grab info about 5day forecast
@@ -128,15 +132,29 @@
                     url: queryForecast,
                     method: "GET"
                 }).then(function(response) {
-                    console.log(response);
+                    
+                    for (let i = 0; i < response.list.length ; i += 8) {
+                        temperatureK = response.list[i].main.temp;
+                        temperatureF = ((Number(temperatureK) - 273.15) * 1.8) + 32;
+                        humidity = response.list[i].main.humidity;
+                        let dateTime = response.list[i].dt_txt;
+                        let date = dateTime.split(" ");
+                        let cityInfo = $("<div>");
+                        $(cityInfo).addClass("ml-2 pl-2 col-sm-12 col-md-4 col-xl-2 pb-2 mb-2 border");
+                        $(cityInfo).append("<h4> " + date[0] + "</h4><br>");
+                        $(cityInfo).append("<h5> Temperature (F): " + temperatureF.toFixed(2) + "&#8457</h5><br>");
+                        $(cityInfo).append("<h5> Humidity: " + humidity + "%</h5><br>");
+                        $("#forecast").append(cityInfo);
+
+                    }
                 })
             }
             // renders current weather + UV
             function renderWeather(cityName,temperatureF,humidity,windSpeed,UV) {
                 let cityInfo = $("<div>");
-                $(cityInfo).addClass("ml-2 pl-2")
+                $(cityInfo).addClass("ml-2 pl-2");
                 $(cityInfo).append("<h2>" + cityName + "</h2><br>");
-                $(cityInfo).append("<h4> Temperature (F): " + temperatureF.toFixed(2) + "</h4><br>");
+                $(cityInfo).append("<h4> Temperature (F): " + temperatureF.toFixed(2) + "&#8457</h4><br>");
                 $(cityInfo).append("<h4> Humidity: " + humidity + "%</h4><br>");
                 $(cityInfo).append("<h4> Wind Speed: " + windSpeed + " MPH</h4><br>");
                 $(cityInfo).append("<h4> UV: " + UV + "</h4><br>");
