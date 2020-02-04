@@ -30,9 +30,9 @@
                     <button type="submit"><i class="fa fa-search" style="font-size: 48px;"></i></button> -->
 
                     <!-- <span class="algolia-autocomplete" style="position: relative; display: inline-block; direction: ltr;"> -->
-                        <input type="text" class="form-control ds-input" id="search-input"placeholder="Search..."></input>
+                    <input type="text" class="form-control ds-input" id="search-input" placeholder="Search..."></input>
                     <!-- </span> -->
-                    <!-- <button type="submit"><i class="fa fa-search"></i></button> -->
+                    <button type="submit"><i class="fa fa-search"></i></button>
                 </form>
 
                 <div class="sidebar-sticky">
@@ -52,10 +52,10 @@
             </div> -->
 
             <div class="col-md-8">
-                <div class = "row ml-1 py-1 border" id = "currentWeather">
+                <div class="row ml-1 py-1 border" id="currentWeather">
 
                 </div>
-                <div class = "row ml-1 py-1 mt-2 pt-2" id = "forecast"> 
+                <div class="row ml-1 py-1 mt-2 pt-2" id="forecast">
                     <h3>5-Day Forecast</h3>
 
                 </div>
@@ -64,74 +64,94 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
-    $(document).ready(function(){ 
-        var cities = ["Atlanta", "Brooklyn", "Chicago", "Denver", "Houston", "Indiana", "Miami", "Orlando", "Seattle"]
-        // runs a loop to display each city
-        $(cities).each(function () {
-            let city = this;
-            renderSideBar(city);
-        })
-        // function to display each city
-        function renderSideBar(city) {
-            let cityli = $("<li>");
-            $(cityli).addClass("nav-item");
-            let cityA = $("<a>");
-            $(cityA).addClass("nav-link text-primary border")
-            $(cityA).text(city)
-            $(cityli).append(cityA)
-            $("#side").append(cityli)
-        }
-        // function to get data from openweathermap
-        $(".nav-item").on("click", function () {
-            let city = $(this).text();
-            renderCity(city)
-        })
-        // render city
-        function renderCity(city) {
-            var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=166a433c57516f51dfab1f7edaed8413";
-            $.ajax({
-                url: queryURL,
-                method: "GET"
-            }).then(function (response) {
-                let cityName = response.name;
-                let temperatureK = response.main.temp;
-                let temperatureF = ((Number(temperatureK) - 273.15) * 1.8) + 32;
-                let humidity = response.main.humidity;
-                let windSpeed = response.wind.speed;
+        $(document).ready(function () {
+            var cities = ["Atlanta", "Brooklyn", "Chicago", "Denver", "Houston", "Indiana", "Miami", "Orlando", "Seattle"]
+            // runs a loop to display each city
+            $(cities).each(function () {
+                let city = this;
+                renderSideBar(city);
+            })
+            // function to display each city
+            function renderSideBar(city) {
+                let cityli = $("<li>");
+                $(cityli).addClass("nav-item");
+                let cityA = $("<a>");
+                $(cityA).addClass("nav-link text-primary border")
+                $(cityA).text(city)
+                $(cityli).append(cityA)
+                $("#side").append(cityli)
+            }
+            // function to get data from openweathermap
+            $(".nav-item").on("click", function () {
+                let city = $(this).text();
+                renderCity(city)
+            })
+            // render city
+            function renderCity(city) {
+                var apiKey = "&appid=712bd548fef61a9da60836878da0b06d"
+                var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + apiKey;
+                var queryForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + apiKey;
+
+                $.ajax({
+                    url: queryURL,
+                    method: "GET"
+                }).then(function (response) {
+                    console.log(response);
+                    let cityName = response.name;
+                    let longitude = response.coord.lon;
+                    let latitude = response.coord.lat;
+                    let UV = "";
+                    let temperatureK = response.main.temp;
+                    let temperatureF = ((Number(temperatureK) - 273.15) * 1.8) + 32;
+                    let humidity = response.main.humidity;
+                    let windSpeed = response.wind.speed;
+                    renderUV(apiKey,longitude,latitude);
+                    console.log(UV)
+                    renderWeather(cityName,temperatureF,humidity,windSpeed,UV);
+                    renderFiveDay(apiKey,city);
+                })
+            }
+            // grab info about uv
+            function renderUV(longitude,latitude) {
+                let queryUV = "https://api.openweathermap.org/data/2.5/uvi?appid=" + apikey + longitude + latitude;
+                $.ajax({
+                    url: queryUV,
+                    method: "GET"
+                }).then(function(response) {
+                    console.log(response);
+                })
+            }
+            // grab info about 5day forecast
+            function renderFiveDay (apiKey,city) {
+                let queryForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + apiKey;
+                $.ajax({
+                    url: queryForecast,
+                    method: "GET"
+                }).then(function(response) {
+                    console.log(response);
+                })
+            }
+            // renders current weather + UV
+            function renderWeather(cityName,temperatureF,humidity,windSpeed,UV) {
                 let cityInfo = $("<div>");
                 $(cityInfo).addClass("ml-2 pl-2")
-
                 $(cityInfo).append("<h2>" + cityName + "</h2><br>");
                 $(cityInfo).append("<h4> Temperature (F): " + temperatureF.toFixed(2) + "</h4><br>");
                 $(cityInfo).append("<h4> Humidity: " + humidity + "%</h4><br>");
                 $(cityInfo).append("<h4> Wind Speed: " + windSpeed + " MPH</h4><br>");
-                $(cityInfo).append("<h4> UV: " + "</h4><br>")
-
+                $(cityInfo).append("<h4> UV: " + UV + "</h4><br>");
                 $("#currentWeather").html(cityInfo);
+            }
+
+            // input event 
+            $("button").on("click", function (event) {
+                event.preventDefault();
+                let newCity = $("#search-input").val().trim();
+                console.log($("#search-input").val());
+                console.log($("#search-input").text());
+                renderCity(newCity);
             })
-        }
-        // input event 
-        $("input").on("submit", function(event){
-            event.preventDefault();
-            alert("Yooo");
-            let newCity = $(this).val().trim();
-            console.log($(this).val());
-            console.log($(this).text());
-            renderCity(newCity);
         })
-
-        // $("#search-input").keypress(function (event) {
-        //     let keycode = (event.keyCode ? event.keyCode : event.which);
-        //     if (keycode === '13') {
-        //         alert("Yooo");
-        //         let city = $(this).val().trim();
-        //         console.log($(this).val());
-        //         console.log($(this).text());
-        //         renderCity(city);
-        //     }
-        // })
-
-    })
     </script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
