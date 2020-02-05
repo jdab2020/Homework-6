@@ -66,10 +66,21 @@ $(document).ready(function () {
             url: queryUV,
             method: "GET"
         }).then(function(response) {
-            // console.log(response);
+            console.log(response);
             UV = response.value;
-            // $(UV).attr("background-color","red");
             $("#uv-index").text("UVI: " + UV);
+            if (UV <= 3) {
+                $("#uv-index").last().css("background-color","green");   
+            } else if ( UV > 3 && UV <= 6) {
+                $("#uv-index").last().css("background-color","yellow");
+            } else if ( UV > 6 && UV <= 8) {
+                $("#uv-index").last().css("background-color","orange");
+            } else if ( UV > 8 && UV <= 10) {
+                $("#uv-index").last().css("background-color","red");
+            } else if ( UV > 10) {
+                $("#uv-index").last().css("background-color","purple");
+            }
+            
         })
     }
     // grab info about 5day forecast and display
@@ -80,7 +91,7 @@ $(document).ready(function () {
             method: "GET"
         }).then(function(response) {
             $("#forecast").empty();
-            console.log(response);
+            // console.log(response);
             for (let i = 7; i <= response.list.length ; i += 8) {
                 temperatureK = response.list[i].main.temp;
                 temperatureF = ((Number(temperatureK) - 273.15) * 1.8) + 32;
