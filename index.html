@@ -7,6 +7,8 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 
     <title>Weather Dashboard</title>
 </head>
@@ -22,18 +24,10 @@
 
                 <h4>Search for a city:</h4>
 
-                <form role="search" class="bd-search d-flex align-items-center py-2">
-
-                    <!-- <div class="form-group mx-sm-3 mb-2">
-                        <input type="search" class="form-control" placeholder="Search...">
-                        </div>
-                    <button type="submit"><i class="fa fa-search" style="font-size: 48px;"></i></button> -->
-
-                    <!-- <span class="algolia-autocomplete" style="position: relative; display: inline-block; direction: ltr;"> -->
-                    <input type="text" class="form-control ds-input" id="search-input" placeholder="Search..."></input>
-                    <!-- </span> -->
-                    <button type="submit"><i class="fa fa-search"></i></button>
-                </form>
+                <div class="bd-search d-flex align-items-center py-2">
+                    <input type="text" class="form-control ds-input mr-1" id="search-input" placeholder="Search..."></input>
+                    <button class="btn btn-primary"><i class="fa fa-search"></i></button>
+                </div>
 
                 <div class="sidebar-sticky">
                     <ul id="side" class="nav flex-column">
@@ -41,136 +35,22 @@
                 </div>
             </div>
 
-            <!-- <div class="col-md-2 border-right border dark">
-                <h4>Search for a city:</h4>
-                <input type="text" id="search-input" placeholder="Search..."></input>
-                <div>
-                    <ul id="side" class="flex-column">
-
-                    </ul>
-                </div>
-            </div> -->
-
             <div class="col-md-8">
-                <div class="row ml-1 py-1 border" id="currentWeather">
+                <div class="row border" id="currentWeather">
 
                 </div>
                 <div class="row ml-1 py-1 mt-2 pt-2">
-                    <div class="row mx-auto"><h3>5-Day Forecast</h3></div>
-                    <div class="row" id="forecast">
-
-                    </div>
+                    <div class="row mx-auto"><h3 id="forecastHeader"></h3></div>
+                    <div class="row" id="forecast"></div>
                 </div>
             </div>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            var cities = ["Atlanta", "Brooklyn", "Chicago", "Denver", "Houston", "Indiana", "Miami", "Orlando", "Seattle"]
-            // runs a loop to display each city
-            $(cities).each(function () {
-                let city = this;
-                renderSideBar(city);
-            })
-            // function to display each city
-            function renderSideBar(city) {
-                let cityli = $("<li>");
-                $(cityli).addClass("nav-item");
-                let cityA = $("<a>");
-                $(cityA).addClass("nav-link text-primary border")
-                $(cityA).text(city)
-                $(cityli).append(cityA)
-                $("#side").append(cityli)
-            }
-            // function to get data from openweathermap
-            $(".nav-item").on("click", function () {
-                let city = $(this).text();
-                renderCity(city)
-            })
-            // render city
-            function renderCity(city) {
-                var apiKey = "&appid=712bd548fef61a9da60836878da0b06d"
-                var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + apiKey;
-                var queryForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + apiKey;
+    <script src="script.js"></script>
+    <!-- <script type="text/javascript">
 
-                $.ajax({
-                    url: queryURL,
-                    method: "GET"
-                }).then(function (response) {
-                    console.log(response);
-                    let cityName = response.name;
-                    let longitude = response.coord.lon;
-                    let latitude = response.coord.lat;
-                    let UV = "";
-                    let temperatureK = response.main.temp;
-                    let temperatureF = ((Number(temperatureK) - 273.15) * 1.8) + 32;
-                    let humidity = response.main.humidity;
-                    let windSpeed = response.wind.speed;
-                    renderUV(apiKey,latitude,longitude);
-                    renderWeather(cityName,temperatureF,humidity,windSpeed,UV);
-                    renderFiveDay(apiKey,city);
-                })
-            }
-            // grab info about uv
-            function renderUV(apiKey,latitude,longitude) {
-                let queryUV = "https://api.openweathermap.org/data/2.5/uvi/forecast?appid=" + apiKey + "&lat=" + latitude + "&lon=" + longitude;
-
-                $.ajax({
-                    url: queryUV,
-                    method: "GET"
-                }).then(function(response) {
-                    console.log(response);
-                    UV = response.value;
-                    return UV;
-                })
-            }
-            // grab info about 5day forecast
-            function renderFiveDay (apiKey,city) {
-                let queryForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + apiKey;
-                $.ajax({
-                    url: queryForecast,
-                    method: "GET"
-                }).then(function(response) {
-                    
-                    for (let i = 0; i < response.list.length ; i += 8) {
-                        temperatureK = response.list[i].main.temp;
-                        temperatureF = ((Number(temperatureK) - 273.15) * 1.8) + 32;
-                        humidity = response.list[i].main.humidity;
-                        let dateTime = response.list[i].dt_txt;
-                        let date = dateTime.split(" ");
-                        let cityInfo = $("<div>");
-                        $(cityInfo).addClass("ml-2 pl-2 col-sm-12 col-md-4 col-xl-2 pb-2 mb-2 border");
-                        $(cityInfo).append("<h4> " + date[0] + "</h4><br>");
-                        $(cityInfo).append("<h5> Temperature (F): " + temperatureF.toFixed(2) + "&#8457</h5><br>");
-                        $(cityInfo).append("<h5> Humidity: " + humidity + "%</h5><br>");
-                        $("#forecast").append(cityInfo);
-
-                    }
-                })
-            }
-            // renders current weather + UV
-            function renderWeather(cityName,temperatureF,humidity,windSpeed,UV) {
-                let cityInfo = $("<div>");
-                $(cityInfo).addClass("ml-2 pl-2");
-                $(cityInfo).append("<h2>" + cityName + "</h2><br>");
-                $(cityInfo).append("<h4> Temperature (F): " + temperatureF.toFixed(2) + "&#8457</h4><br>");
-                $(cityInfo).append("<h4> Humidity: " + humidity + "%</h4><br>");
-                $(cityInfo).append("<h4> Wind Speed: " + windSpeed + " MPH</h4><br>");
-                $(cityInfo).append("<h4> UV: " + UV + "</h4><br>");
-                $("#currentWeather").html(cityInfo);
-            }
-
-            // input event 
-            $("button").on("click", function (event) {
-                event.preventDefault();
-                let newCity = $("#search-input").val().trim();
-                console.log($("#search-input").val());
-                console.log($("#search-input").text());
-                renderCity(newCity);
-            })
-        })
-    </script>
+    </script> -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
         crossorigin="anonymous"></script>
