@@ -60,7 +60,7 @@ $(document).ready(function () {
     }
     // grab info about uv and display
     function renderUV(apiKey,latitude,longitude) {
-        let queryUV = "http://api.openweathermap.org/data/2.5/uvi?" + apiKey + "&lat=" + latitude + "&lon=" + longitude;
+        let queryUV = "https://api.openweathermap.org/data/2.5/uvi?" + apiKey + "&lat=" + latitude + "&lon=" + longitude;
 
         $.ajax({
             url: queryUV,
