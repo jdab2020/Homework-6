@@ -1,12 +1,18 @@
 $(document).ready(function () {
-    var cities = [];
-    // runs a loop to display each city
-    if (!cities){
+    let cities = [];
+    renderLocalStorage();
+
+    function renderLocalStorage () {
+        let test = localStorage.getItem("savedCity");
+        if (!test) {
+            return;
+        }
+        cities = JSON.parse(localStorage.getItem("savedCity"))
         $(cities).each(function () {
             let city = this;
             renderSideBar(city);
         });
-    };
+    }
     // function to display each city
     function renderSideBar(city) {
         let cityli = $("<li>");
@@ -19,6 +25,8 @@ $(document).ready(function () {
     }
     // function to get data from openweathermap
     $(".nav-item").on("click", function () {
+        console.log($(this).text());
+        console.log($(this).val());
         let city = $(this).text();
         renderCity(city)
     })
@@ -26,7 +34,6 @@ $(document).ready(function () {
     function renderCity(city) {
         var apiKey = "&appid=712bd548fef61a9da60836878da0b06d"
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + apiKey;
-        var queryForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + apiKey;
 
         $.ajax({
             url: queryURL,
@@ -48,7 +55,6 @@ $(document).ready(function () {
     }
     // grab info about uv
     function renderUV(apiKey,latitude,longitude) {
-        // let queryUV = "https://api.openweathermap.org/data/2.5/uvi/forecast?" + apiKey + "&lat=" + latitude + "&lon=" + longitude;
         let queryUV = "http://api.openweathermap.org/data/2.5/uvi?" + apiKey + "&lat=" + latitude + "&lon=" + longitude;
 
         $.ajax({
@@ -82,7 +88,7 @@ $(document).ready(function () {
                 $(cityInfo).append("<h6> Humidity: " + humidity + "%</h6><br>");
                 $("#forecast").append(cityInfo);
             }
-            $("#forecastHeader").append("5-Day Forecast")
+            $("#forecastHeader").html("5-Day Forecast")
         })
     }
     // renders current weather
@@ -105,6 +111,9 @@ $(document).ready(function () {
         let newCity = $("#search-input").val().trim();
         // console.log($("#search-input").val());
         // console.log($("#search-input").text());
+        cities.push(newCity);
+        localStorage.setItem("savedCity", JSON.stringify(cities));
         renderCity(newCity);
+        renderSideBar(newCity);
     })
 })
