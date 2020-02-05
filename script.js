@@ -89,7 +89,7 @@ $(document).ready(function () {
                 let date = dateTime.split(" ");
                 let iconI = $("<img>");
                 let iconCode = response.list[i].weather[0].icon;
-                let iconURL = "http://openweathermap.org/img/wn/" + iconCode + ".png"
+                let iconURL = "https://openweathermap.org/img/wn/" + iconCode + ".png"
                 $(iconI).attr("src", iconURL);
                 let cityInfo = $("<div>");
                 $(cityInfo).addClass("ml-2 pl-2 col-sm-12 col-md-4 col-xl-2 pb-2 mb-2 border");
@@ -106,7 +106,7 @@ $(document).ready(function () {
     function renderWeather(cityName,temperatureF,humidity,windSpeed,iconCode) {
         let cityInfo = $("<div>");
         let iconI = $("<img>");
-        let iconURL = "http://openweathermap.org/img/wn/" + iconCode + ".png"
+        let iconURL = "https://openweathermap.org/img/wn/" + iconCode + ".png"
         $(iconI).attr("src", iconURL);
         $(cityInfo).addClass("ml-2 pl-2");
         $(cityInfo).append("<h2>" + cityName + " (" + year + "/" + month + "/" + day + ")" + "</h2>");
