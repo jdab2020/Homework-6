@@ -21,18 +21,13 @@ $(document).ready(function () {
     function renderSideBar(city) {
         let cityli = $("<li>");
         $(cityli).addClass("nav-item");
+        $(cityli).on("click", navClickHandler);
         let cityA = $("<a>");
         $(cityA).addClass("nav-link text-primary border");
         $(cityA).text(city);
         $(cityli).append(cityA);
         $("#side").append(cityli);
     }
-    // function to get data from openweathermap
-    // $(".nav-item").on("click", function navClickHandler() {
-    //     let city = $(this).text();
-    //     renderCity(city)
-    // })
-
     // main function to get information on current weather, uv, and 5-day forecast
     function renderCity(city) {
         var apiKey = "&appid=712bd548fef61a9da60836878da0b06d"
@@ -141,7 +136,6 @@ $(document).ready(function () {
         localStorage.setItem("savedCity", JSON.stringify(cities));
         renderCity(newCity);
         renderSideBar(newCity);
-        $(".nav-item").on("click", navClickHandler);
     })
     // click event for previously saved searches
     $(".nav-item").on("click", navClickHandler);
