@@ -18,18 +18,21 @@ $(document).ready(function () {
         let cityli = $("<li>");
         $(cityli).addClass("nav-item");
         let cityA = $("<a>");
-        $(cityA).addClass("nav-link text-primary border")
-        $(cityA).text(city)
-        $(cityli).append(cityA)
-        $("#side").append(cityli)
+        $(cityA).addClass("nav-link text-primary border");
+        $(cityA).text(city);
+        $(cityli).append(cityA);
+        $("#side").append(cityli);
     }
     // function to get data from openweathermap
-    $(".nav-item").on("click", function () {
-        console.log($(this).text());
-        console.log($(this).val());
-        let city = $(this).text();
-        renderCity(city)
-    })
+    // $(".nav-item").on("click", function navClickHandler() {
+    //     let city = $(this).text();
+    //     renderCity(city)
+    // })
+
+    
+
+
+
     // render city
     function renderCity(city) {
         var apiKey = "&appid=712bd548fef61a9da60836878da0b06d"
@@ -63,6 +66,7 @@ $(document).ready(function () {
         }).then(function(response) {
             // console.log(response);
             UV = response.value;
+            // $(UV).attr("background-color","red");
             $("#uv-index").text("UVI: " + UV);
         })
     }
@@ -115,5 +119,13 @@ $(document).ready(function () {
         localStorage.setItem("savedCity", JSON.stringify(cities));
         renderCity(newCity);
         renderSideBar(newCity);
+        $(".nav-item").on("click", navClickHandler);
     })
+    
+    $(".nav-item").on("click", navClickHandler);
+
+    function navClickHandler () {
+        let city = $(this).text();
+        renderCity(city);
+    }
 })
